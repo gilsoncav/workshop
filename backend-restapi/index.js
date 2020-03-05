@@ -2,8 +2,8 @@
  * Form Submit
  */
 
-const AWS = require('aws-sdk')
-const dynamoDb = new AWS.DynamoDB.DocumentClient()
+const AWS = require('aws-sdk');
+const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 const submit = async (event, context) => {
 
@@ -25,16 +25,16 @@ const submit = async (event, context) => {
   // Set default event body
   let data = event && event.body ? event.body : null
   // Parse, if necessary
-  data = typeof data === 'string' ? JSON.parse(data) : data
+  data = typeof data === 'string' ? JSON.parse(data) : data;
 
-  console.log(data)
+  console.log(data);
 
   // If no data, throw an error
   if (!data ||
     typeof data !== 'object' ||
     !data.email ||
     !data.name) {
-    console.error('Data not included in response body.')
+    console.error('Data not included in response body.');
     return {
       statusCode: 400,
       headers: {
@@ -48,8 +48,8 @@ const submit = async (event, context) => {
   }
 
   // If no database, throw an error
-  if (!process.env.database_submissions_name) {
-    console.error('Database not found.')
+  if (!process.env.JPX_WORKSHOP_DEV_DDBTABLE) {
+    console.error('Database not found.');
     return {
       statusCode: 500,
       headers: {
@@ -62,21 +62,23 @@ const submit = async (event, context) => {
     }
   }
 
+  console.log(`env variable process.env.database_submission_region: ${process.env.database_submission_name}`);
+
   const params = {
-    TableName: process.env.database_submissions_name,
+    TableName: process.env.database_submission_name,
     Item: {
       email: data.email,
       name: data.name,
       createdAt: new Date().getTime(),
       updatedAt: new Date().getTime(),
     },
-  }
+  };
 
-  let result
+  let result;
   try {
     result = await dynamoDb.put(params).promise()
   } catch(error) {
-    console.error('DyanmoDB PUT error' + error.message)
+    console.error('DynamoDB PUT error' + error.message);
     return {
       statusCode: 500,
       headers: {
@@ -101,9 +103,9 @@ const submit = async (event, context) => {
       email: data.email,
     }),
   }
-}
+};
 
-module.exports = { submit }
+module.exports = { submit };
 
 /**
  * Demo Utility Functions
@@ -112,8 +114,8 @@ module.exports = { submit }
 const crash = () => {
   let r = Math.random().toString(36).substring(7)
   throw new Error(`Self-inflicted function crash: ${r}`)
-}
+};
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
-}
+};

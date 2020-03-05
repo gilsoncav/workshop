@@ -4,16 +4,15 @@ service: fullstack-restapi # update
 
 provider:
   name: aws
-  runtime: nodejs8.10
-  region: us-east-1
+  runtime: nodejs12.x
+  region: sa-east-1
   environment:
-    database_submissions_name: ${output::${param:env}::fullstack-database.database_submissions_name}
-    database_submissions_region: ${output::${param:env}::fullstack-database.database_submissions_region}
+    database_submissions_name: ${param:jpx-workshop-ddbtable-name}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
-      Resource: "arn:aws:dynamodb:*:*:table/${output::${param:env}::fullstack-database.database_submissions_name}"
+      Resource: ${param:jpx-workshop-ddbtable-arn}
 
 functions:
   formSubmit:

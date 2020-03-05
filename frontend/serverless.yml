@@ -4,14 +4,14 @@ service: fullstack-website
 
 provider:
   name: aws
-  runtime: nodejs8.10
-  region: us-west-2
+  runtime: nodejs12.x
+  region: sa-east-1
 
 plugins:
   - serverless-finch
 
 custom:
   client:
-    bucketName: demo-fullstack-ja189j # Change this to a universally unique bucket name
+    bucketName: jpx-workshop-s3bucket # Change this to a universally unique bucket name
     distributionFolder: ./build
 
